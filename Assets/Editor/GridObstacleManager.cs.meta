@@ -3,7 +3,9 @@ guid: c934faa8e45d0194bbb2de9d13d69ef2
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - obstacleSO: {fileID: 11400000, guid: 7711561533fdba145a226617c6a6cbe9, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

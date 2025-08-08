@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: Retroville NC SDF
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: 2020160056
   material: {fileID: 2705281623534900774}
-  materialHashCode: 0
+  materialHashCode: 1391033624
   m_Version: 1.1.0
   m_SourceFontFileGUID: 5f25a65239a479943b0fa4aeb3cebcd2
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 5f25a65239a479943b0fa4aeb3cebcd2, type: 3}
@@ -2586,9 +2586,9 @@ Material:
     - _OutlineWidth: 0
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
-    - _ScaleRatioA: 1
-    - _ScaleRatioB: 1
-    - _ScaleRatioC: 1
+    - _ScaleRatioA: 0.85714287
+    - _ScaleRatioB: 0.6964286
+    - _ScaleRatioC: 0.6964286
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0

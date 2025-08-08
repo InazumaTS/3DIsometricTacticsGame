@@ -14,6 +14,6 @@ public class LocationText : MonoBehaviour
     // Start is called before the first frame update
     public void LocationShow(Vector2 position)
     {
-        locationText.text = $"( {position.x},{position.y} )";
+        locationText.text = $"( {position.x},{position.y} )"; //Changes the text to show the position of the mouse with respect to the grid
     }
 }
