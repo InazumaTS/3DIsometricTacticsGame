@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 297639018260302221}
   - component: {fileID: 1388497133217637069}
   - component: {fileID: 8329967224551299404}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: GridBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
