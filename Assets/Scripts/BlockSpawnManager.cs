@@ -14,6 +14,7 @@ public class BlockSpawnManager : MonoBehaviour
     private float gridBlockOffset = 1.0f; // Offset between blocks in the grid
     [SerializeField]
     private Vector3 gridOrigin = new Vector3(0,0,0); // Origin point for the grid
+    private GameObject BlockInfo;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,7 +36,9 @@ public class BlockSpawnManager : MonoBehaviour
                 GameObject selectedBlock = groundChoicesToPick[randomIndex];
                 
                 // Instantiate the selected block at the calculated position
-                Instantiate(selectedBlock, spawnPosition, Quaternion.identity);
+                BlockInfo = Instantiate(selectedBlock, spawnPosition, Quaternion.identity);
+                GridBlockInfo gridBlockInfo = BlockInfo.GetComponent<GridBlockInfo>();
+                gridBlockInfo.InitializeGridPosition(x, z); // Initialize the grid position for the block
             }
         }
     }

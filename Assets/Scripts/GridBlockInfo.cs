@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GridBlockInfo : MonoBehaviour
 {
-    private Vector2 gridPosition = new Vector2(0,0); // imaginary grid position for this block to use for positioning in the transform space.
+    public Vector2 gridPosition = new Vector2(0,0); // imaginary grid position for this block to use for positioning in the transform space.
     [SerializeField]
     private GameObject gridBlockSelected; // This is the GameObject that will be activated or deactivated to indicate selection.
     
@@ -13,7 +13,6 @@ public class GridBlockInfo : MonoBehaviour
     {
         gridPosition = new Vector2(gridPositionX,gridPositionY);
     }
-
     public void SetActiveOff() //Turns off the selection indicator
     {
         if(gridBlockSelected.activeSelf == true)
