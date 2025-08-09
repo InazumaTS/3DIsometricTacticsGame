@@ -1,18 +1,16 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerControls : MonoBehaviour
+public class EnemyAI : MonoBehaviour, AI
 {
     [SerializeField]
-    private float movementSpeed=7f;
+    private float movementSpeed = 7f;
     [SerializeField]
     private LayerMask layerMask;
     [SerializeField]
     private RayCastMouse rayCastMouse; // Reference to the RayCastMouse component for mouse raycasting
-    [SerializeField]
-    private EnemyAI enemyAI;
     private RaycastHit hit;
     private GridBlockInfo gridBlockInfo;
     Vector2 startPosition;
@@ -23,8 +21,11 @@ public class PlayerControls : MonoBehaviour
     int gCost;
     int hCost;
     int fCost;
-    int bestFCost= 1000;
-    
+    int bestFCost = 1000;
+    private int adjacentMoveCounter = 0;
+    private int maxAdjacentMoveCounter = 4;
+
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -34,24 +35,41 @@ public class PlayerControls : MonoBehaviour
         endPosition = currentPosition;
     }
 
+    public int AdjacentMovementCounter()
+    {
+        return adjacentMoveCounter;
+    }
+
+    public int MaxAdjacentMovementCounter()
+    {
+        return maxAdjacentMoveCounter;
+    }
+    public void AdjacentMoveResetCounter()
+    {
+        adjacentMoveCounter = 0;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(Mathf.Lerp(transform.position.x, bestPosition.x, Time.deltaTime*movementSpeed), transform.position.y, Mathf.Lerp(transform.position.z, bestPosition.y, Time.deltaTime*movementSpeed));
-        if(Mathf.Abs(transform.position.x - bestPosition.x) < 0.001 && Mathf.Abs(transform.position.z - bestPosition.y) < 0.001)
+        transform.position = new Vector3(Mathf.Lerp(transform.position.x, bestPosition.x, Time.deltaTime * movementSpeed), transform.position.y, Mathf.Lerp(transform.position.z, bestPosition.y, Time.deltaTime * movementSpeed));
+        if (Mathf.Abs(transform.position.x - bestPosition.x) < 0.001 && Mathf.Abs(transform.position.z - bestPosition.y) < 0.001)
         {
             transform.position = new Vector3(bestPosition.x, transform.position.y, bestPosition.y);
             currentPosition = bestPosition;
+            adjacentMoveCounter++;
+            
 
         }
-        if(currentPosition != endPosition)
+        if (adjacentMoveCounter >= maxAdjacentMoveCounter)
+        {
+            endPosition = currentPosition;
+            
+        }
+        if (currentPosition != endPosition)
         {
             bestFCost = 1000;
-            GridMovementControl(endPosition);
-        }
-        else if (currentPosition == endPosition && enemyAI.AdjacentMovementCounter() < enemyAI.MaxAdjacentMovementCounter())
-        {
-            enemyAI.Pathway(currentPosition);
+            Pathway(endPosition);
         }
         else
         {
@@ -59,23 +77,19 @@ public class PlayerControls : MonoBehaviour
             bestFCost = 1000;
             rayCastMouse.isMoving = false; // Reset isMoving to false when the player reaches the end position
             
-            
         }
-        
     }
-
-    public void GridMovementControl(Vector2 endPosition)
+    public void Pathway(Vector2 endPosition)
     {
-        enemyAI.AdjacentMoveResetCounter();
         this.endPosition = endPosition;
         float DistanceX;
         float DistanceZ;
-        for(int x = -1; x<=1; x++)
+        for (int x = -1; x <= 1; x++)
         {
-            for(int y = -1; y<=1; y++)
+            for (int y = -1; y <= 1; y++)
             {
                 possiblePosition = currentPosition + new Vector2(x, y);
-                if (Physics.Raycast(new Vector3(possiblePosition.x,transform.position.y,possiblePosition.y),Vector3.down,out hit,100f,layerMask))
+                if (Physics.Raycast(new Vector3(possiblePosition.x, transform.position.y, possiblePosition.y), Vector3.down, out hit, 100f, layerMask))
                 {
                     gridBlockInfo = hit.transform.GetComponent<GridBlockInfo>();//If neighbouring raycast, has obstacle. it will not check for fcost;
                     if (gridBlockInfo.hasObstacle)
@@ -85,26 +99,23 @@ public class PlayerControls : MonoBehaviour
                 }
                 if (x == 0 && y == 0)
                     continue;
-                Debug.Log(possiblePosition);
+                
 
-                DistanceX = ((Mathf.Abs(currentPosition.x - possiblePosition.x)) * (Mathf.Abs(currentPosition.x - possiblePosition.x)))*10;
-                DistanceZ = ((Mathf.Abs(currentPosition.y - possiblePosition.y)) * (Mathf.Abs(currentPosition.y - possiblePosition.y)))*10;
+                DistanceX = ((Mathf.Abs(currentPosition.x - possiblePosition.x)) * (Mathf.Abs(currentPosition.x - possiblePosition.x))) * 10;
+                DistanceZ = ((Mathf.Abs(currentPosition.y - possiblePosition.y)) * (Mathf.Abs(currentPosition.y - possiblePosition.y))) * 10;
                 gCost = (int)Mathf.Sqrt(DistanceX * DistanceX + DistanceZ * DistanceZ);
-                DistanceX = ((Mathf.Abs(endPosition.x - possiblePosition.x)) * (Mathf.Abs(endPosition.x - possiblePosition.x)))*10;
-                DistanceZ = ((Mathf.Abs(endPosition.y - possiblePosition.y)) * (Mathf.Abs(endPosition.y - possiblePosition.y)))*10;
+                DistanceX = ((Mathf.Abs(endPosition.x - possiblePosition.x)) * (Mathf.Abs(endPosition.x - possiblePosition.x))) * 10;
+                DistanceZ = ((Mathf.Abs(endPosition.y - possiblePosition.y)) * (Mathf.Abs(endPosition.y - possiblePosition.y))) * 10;
                 hCost = (int)Mathf.Sqrt(DistanceX * DistanceX + DistanceZ * DistanceZ);
                 fCost = hCost + gCost;
-                Debug.Log(fCost);
-                if (fCost<bestFCost)
+                
+                if (fCost < bestFCost)
                 {
                     bestFCost = fCost;
                     bestPosition = possiblePosition;
-                    Debug.Log("this is the best position" + bestPosition);
+                 
                 }
             }
         }
-        
     }
-
-    
 }
