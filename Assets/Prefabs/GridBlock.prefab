@@ -243,4 +243,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b475e7b11c1fb9f4f88cbaeadf5642b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridPosition: {x: 0, y: 0}
+  hasObstacle: 0
   gridBlockSelected: {fileID: 4367203857277101683}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  ObstacleCatch: {fileID: 0}

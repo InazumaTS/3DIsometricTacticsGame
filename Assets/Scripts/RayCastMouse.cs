@@ -5,8 +5,11 @@ using UnityEngine;
 public class RayCastMouse : MonoBehaviour
 {
     public LayerMask layerMask; // Layer mask to filter raycast hits
+    public bool isMoving = false;
     [SerializeField]
     private LocationText locationText; // Reference to the LocationText component for displaying grid position
+    [SerializeField]
+    private PlayerControls playerControls;
     private GridBlockInfo gridBlock; // Reference to the GridBlockInfo component
     private Camera cam;
     private GridBlockInfo temp = null; // Temperory Reference to store the last selected GridBlockInfo
@@ -41,6 +44,13 @@ public class RayCastMouse : MonoBehaviour
                 gridBlock.SetActiveOn(); // Activate the selection indicator on the grid block
                 temp = gridBlock; // Store the reference to the GridBlockInfo component
                 locationText.LocationShow(gridBlock.gridPosition);
+                if (Input.GetMouseButtonUp(0) && !isMoving) //When Mouse Clicks on the Block, the Player Moves to that Position
+                {
+                    Cursor.lockState = CursorLockMode.Locked;
+                    isMoving = true; // Set isMoving to true to indicate that the player is moving
+                    playerControls.GridMovementControl(gridBlock.gridPosition);
+
+                }
             }
             
         }
